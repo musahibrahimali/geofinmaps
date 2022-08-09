@@ -1,0 +1,26 @@
+{
+  "title": "GeoFinMaps | MTN - everywhere you go",
+  "titleTemplate": "%s - GeoFinMaps",
+  "description": "A platform to support field operators",
+  "openGraph": {
+    "title": "GeoFinMaps | MTN - everywhere you go",
+    "description": "A platform to support field operators",
+    "type": "website",
+    "locale": "en_IE",
+    "url": "https://nextjs.org/commerce",
+    "site_name": "GeoFinMaps",
+    "images": [
+      {
+        "url": "/card.png",
+        "width": 800,
+        "height": 600,
+        "alt": "GeoFinMaps"
+      }
+    ]
+  },
+  "twitter": {
+    "handle": "@mtnghana",
+    "site": "@mtnghana",
+    "cardType": "summary_large_image"
+  }
+}
