@@ -8,6 +8,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - clone this project from github wih `git clone https://github.com/musahibrahimali/geofinmaps.git`
 - open the project in the text editor or ide `(vscode or webstorm)`
 - open a terminal and run `yarn install` or `npm install`
+- rename the `.env.example` file to `.env` and replace `'xxxxxxxxxxxxxxxxxxxxxx (ask me for this key if you dont have one)'` with your own key
 - run `yarn dev` or `npm run dev` 
 - run the backend as well to make then work together, follow the instructions in the README.md of the backend api
 - open your browser and navigate to `http://localhost:3000`
