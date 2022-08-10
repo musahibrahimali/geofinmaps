@@ -24,3 +24,4 @@ export { default as closeIcon } from './images/close.svg';
 export { default as userIcon } from './images/user_icon.png';
 export { default as profileImage } from './images/profile.jpg';
 export { default as bannerImage } from './images/banner-image.png';
+export {default as PinIcon} from './images/pin.png';

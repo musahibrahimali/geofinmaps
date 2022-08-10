@@ -25,7 +25,7 @@ const PopUp = (props) => {
                         color={color || "secondary"}
                         onClick={handleClosePopUp}
                     >
-                        <CloseOutlinedIcon color={iconColor || "secondary"} />
+                        <CloseOutlinedIcon className="text-white" color={iconColor || "secondary"} />
                     </ActionButton>
                 </div>
             </DialogTitle>

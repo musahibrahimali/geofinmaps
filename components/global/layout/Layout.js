@@ -1,10 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { LayoutStyles } from "./LayoutStyles";
 import {
     AppDrawer,
     Footer,
-    SideBar
 } from "../global";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {
@@ -25,7 +23,6 @@ const queryClient = new QueryClient()
 const MainLayout = (props) => {
     /* props */
     const { children } = props;
-    // const styles = LayoutStyles();
     const theme = useSelector((state) => state.theme.theme);
     const user = useSelector((state) => state.user.user);
     const drawer = useSelector((state) => state.drawer.isDrawerOpen);

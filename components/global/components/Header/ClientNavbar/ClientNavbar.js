@@ -128,9 +128,9 @@ const ClientNavbar = (props) => {
         if(data){
             dispatch(setUser(data?.data));
         }else{
-            if(cookie){
-                router.replace('/admin').then(() => console.log());
-            }
+            // if(cookie){
+            //     router.replace('/admin').then(() => console.log());
+            // }
         }
     }, [data?.data]);
 

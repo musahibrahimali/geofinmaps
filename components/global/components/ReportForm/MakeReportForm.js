@@ -4,20 +4,20 @@ import {
     Box
 } from "@mui/material";
 import {
-    DatePicker,
+    CustomDatePicker,
     Form,
     FormButton,
     InputField, Notification,
     RadioControls, UseForm
 } from "../../widgets/FormControls/controls";
-
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import LocationCityOutlinedIcon from '@mui/icons-material/LocationCityOutlined';
 import { MakeReportFormStyles } from './MakeReportFormStyles';
 import { CopyRight } from "../../widgets/globalWidgets";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const initialValues = {
     id: 0,
@@ -38,19 +38,10 @@ function MakeReportForm(props) {
         { id: "normal", title: "Normal" },
     ];
 
-    const { lat, lng } = props;
+    const { addReportUrl, cableId, coordinateId } = props;
     const styles = MakeReportFormStyles();
     const user = useSelector((state) => state.user.user);
     const [notify, setNotify] = useState({ isOpen: false, message: "", type: "" });
-    // notify user of successful log in or log out
-    const notifyUser = () => {
-        setNotify({
-            isOpen: true,
-            message: "report submitted Successfully",
-            type: "success"
-        });
-    }
-
 
     const validateForm = (fieldValues = values) => {
         let temp = { ...errors };
@@ -81,30 +72,47 @@ function MakeReportForm(props) {
         }
     }
 
-    const AddReport = (values) => {
+    const AddReport = async (values) => {
         const data = {
-            fullName: values.fullName,
-            emailAddress: values.emailAddress,
+            author: user?._id,
             location: values.location,
             description: values.description,
-            level: values.level,
+            reportType: values.level,
             title: values.title,
             reportDate: values.reportDate,
-            coord: {
-                lat: lat,
-                lng: lng,
-            }
+            coordinates: coordinateId,
+            cable: cableId,
         }
-        // const addReport = firebase.functions().httpsCallable('addReport');
-        // addReport(data).then(() => {
-        //     notifyUser();
-        // });
+        const response = await axios({
+            url: addReportUrl,
+            method: "POST",
+            withCredentials: true,
+            data: data,
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        });
+        if(response.status === 200 || response.data?.data !== undefined || true) {
+            setNotify({
+                isOpen: true,
+                message: "report submitted Successfully",
+                type: "success"
+            });
+        }else{
+            setNotify({
+                isOpen: true,
+                message: "There was an error submitting report",
+                type: "error"
+            });
+        }
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (validateForm()) {
-            AddReport(values);
+            await AddReport(values);
             handleResetForm();
         }
     }
@@ -115,18 +123,14 @@ function MakeReportForm(props) {
         handleInputChange,
         handleResetForm,
         errors,
-        // eslint-disable-next-line no-unused-vars
         setValues,
     } = UseForm(initialValues, true, validateForm);
 
     useEffect(() => {
-        // firebase.firestore().collection("users").doc(user.uid).get().then((response) => {
-        //     values.fullName = response.data().fullName;
-        // });
-        values.emailAddress = user.email;
+        values.emailAddress = user?.email;
+        values.fullName = user?.fullName;
         setValues(values);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user.email, user.uid, values]);
+    }, [user, values]);
 
     return (
         <React.Fragment>
@@ -158,7 +162,7 @@ function MakeReportForm(props) {
 
                             <InputField
                                 required
-                                label="Id Title"
+                                label="Report Title"
                                 name="title"
                                 placeholder="Cable Damage"
                                 value={values.title}
@@ -181,7 +185,7 @@ function MakeReportForm(props) {
                             <RadioControls
                                 required
                                 name="level"
-                                label="Id Level"
+                                label="Threat Level"
                                 color="primary"
                                 value={values.level}
                                 items={threatLevels}
@@ -192,10 +196,10 @@ function MakeReportForm(props) {
 
                         <Grid item xs={6} className={styles.space}>
 
-                            <DatePicker
+                            <CustomDatePicker
                                 required
                                 name="reportDate"
-                                label="Id Date"
+                                label="Date"
                                 value={values.reportDate}
                                 onChange={handleInputChange}
                             />
@@ -218,8 +222,10 @@ function MakeReportForm(props) {
 
                     <div className={styles.mainContainer}>
                         <FormButton
+                            variant="outlined"
+                            color="primary"
                             type="submit"
-                            text="Id"
+                            text="Submit"
                         />
                         <FormButton
                             variant="outlined"

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { ClientNavbar, GoogleMapView } from "../components/components";
+import {ClientNavbar, GoogleMapView} from "../components/components";
 import { closeDrawer, openDrawer } from '../provider/provider';
 import axios from "axios";
 import { setCookie, removeCookie } from '../provider/provider';
 import { useQuery } from '@tanstack/react-query';
 import {useRouter} from "next/router";
+// import {useRouter} from "next/router";
 
 const fetchData = async (cableUrl) => {
   return axios({
@@ -20,10 +21,19 @@ const fetchData = async (cableUrl) => {
   });
 }
 
+
 const HomePage = (props) => {
-  const { apiKey, cookie, cableUrl, profileUrl, logOutUrl } = props;
+  const {
+    apiKey,
+    cookie,
+    cableUrl,
+    profileUrl,
+    logOutUrl,
+    addReportUrl,
+  } = props;
   const drawer = useSelector((state) => state.drawer.isDrawerOpen);
   const [coordinates, setCoordinates] = useState(null);
+  const user = useSelector((state) => state.user.user);
 
   // create an instance of dispatch to pass to the footer
   const dispatch = useDispatch();
@@ -51,9 +61,18 @@ const HomePage = (props) => {
     const handleIsCookie = () => {
       if (cookie) {
         dispatch(setCookie(true));
+        // wait for 10 seconds and then check if user is admin
+        setTimeout(() => {
+          if(user?.isAmin){
+            router.replace('/admin').then(() => {});
+          }
+          if(cookie && user === null){
+            router.replace('/admin').then(() => {});
+          }
+        }, 10000);
       } else {
         dispatch(removeCookie(false));
-        // router.replace('/auth').then(() => console.log() );
+        router.replace('/auth').then(() => console.log() );
       }
     }
 
@@ -72,6 +91,7 @@ const HomePage = (props) => {
         console.log("data not in yet")
       }
     }
+
     handleIsCookie();
     getAllCoordinates();
   }, [cookie, data?.data, dispatch]);
@@ -84,11 +104,14 @@ const HomePage = (props) => {
           cookie={cookie}
           handleOpenDrawer={handleOpenDrawer}
       />
+
       <GoogleMapView
           mapApiKey={apiKey}
           cableData={data?.data}
           coordinates={coordinates}
+          addReportUrl={addReportUrl}
       />
+
     </React.Fragment>
   )
 }
@@ -99,6 +122,7 @@ export const getServerSideProps = async ({ req }) => {
   const cableUrl = process.env.ALLCABLESURL;
   const profileUrl = process.env.PROFILEURL;
   const logOutUrl = process.env.LOGOUT_URL;
+  const addReportUrl = process.env.CREATE_REPORT_URL;
   let user = false;
   const cookie = req.cookies['access_token'];
   if (cookie !== undefined) {
@@ -112,6 +136,7 @@ export const getServerSideProps = async ({ req }) => {
       cableUrl: cableUrl,
       profileUrl: profileUrl,
       logOutUrl: logOutUrl,
+      addReportUrl:addReportUrl,
     }
   }
 }

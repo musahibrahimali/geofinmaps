@@ -78,7 +78,17 @@ const AdminIndex = (props) => {
     );
 
     useEffect(() => {
-        router.replace('/admin/auth').then(() => console.log());
+        if(!cookie && user === null){
+            router.replace('/admin/auth').then(() => console.log());
+        }
+        setTimeout(() => {
+            if(!user?.isAmin){
+                router.replace('/').then(() => {});
+            }
+            if(cookie && user === null){
+                router.replace('/').then(() => {});
+            }
+        }, 10000);
     }, []);
 
     return (
