@@ -8,6 +8,11 @@
 # testing
 /coverage
 
+# ide
+.idea/
+.vs/
+.vscode/
+
 # next.js
 /.next/
 /out/

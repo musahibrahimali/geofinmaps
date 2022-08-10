@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## instructions
+- install [Node Js](https://nodejs.org/en/download/) from online
+- install yarn with `npm install -g yarn` (optional)
+- install a text editor or an ide `(vscode or webstorm)`
+- clone this project from github wih `git clone`
+- open the project in the text editor or ide `(vscode or webstorm)`
+- open a terminal and run `yarn install` or `npm install`
+- run `yarn dev` or `npm run dev` 
+- run the backend as well to make then work together, follow the instructions in the README.md of the backend api
+- open your browser and navigate to `http://localhost:3000`
+
+
 ## Getting Started
 
 First, run the development server:
